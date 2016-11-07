@@ -9,7 +9,6 @@ function installUSBSERIAL {
         make -C /usr/src/linux-headers-4.4.0-45-generic  M=`pwd` modules
         mkdir -p /lib/modules/4.4.0-45-generic/kernel/drivers/usb/serial
         cp usbserial.ko /lib/modules/4.4.0-45-generic/kernel/drivers/usb/serial/usbserial.ko
-        insmod /lib/modules/4.4.0-45-generic/kernel/drivers/usb/serial/usbserial.ko
 }
 
 function installCP210X {
@@ -19,8 +18,16 @@ function installCP210X {
         cd Linux_3.x.x_VCP_Driver_Source
         make
         cp cp210x.ko /lib/modules/4.4.0-45-generic/kernel/drivers/usb/serial/cp210x.ko
-        insmod /lib/modules/4.4.0-45-generic/kernel/drivers/usb/serial/cp210x.ko
 }
+
+function installModules {
+        cd /root
+        depmod -a
+        modprobe usbserial
+        modprobe cp210x
+}
+
 echo "Setup USB2Serial modules"
 installUSBSERIAL
 installCP210X
+installModules
